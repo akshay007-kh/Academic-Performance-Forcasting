@@ -1,0 +1,331 @@
+
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Performance Prediction</title>
+
+    <link rel="stylesheet"
+          href="{% static 'css/style.css' %}">
+
+</head>
+
+
+<body>
+
+<div class="page-container">
+
+
+    <!-- PAGE HEADER -->
+
+    <div class="page-header">
+
+        <div>
+
+            <h1>Performance Prediction</h1>
+
+            <p>
+                ML-based academic performance forecast
+            </p>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- PREDICTION CARD -->
+
+    <div class="form-card">
+
+
+        <!-- STUDENT DETAILS -->
+
+        <h2>Student Details</h2>
+
+        <div class="prediction-info">
+
+            <p>
+
+                <strong>Student:</strong>
+
+                {{ prediction.student.name }}
+
+            </p>
+
+
+            <p>
+
+                <strong>Student ID:</strong>
+
+                {{ prediction.student.student_id }}
+
+            </p>
+
+
+            <p>
+
+                <strong>Course:</strong>
+
+                {{ prediction.student.course }}
+
+            </p>
+
+
+            <p>
+
+                <strong>Department:</strong>
+
+                {{ prediction.student.department }}
+
+            </p>
+
+
+            <p>
+
+                <strong>Semester:</strong>
+
+                {{ record.semester }}
+
+            </p>
+
+        </div>
+
+
+        <hr>
+
+
+        <!-- ACADEMIC INPUT -->
+
+        <h2>Academic Data</h2>
+
+        <div class="prediction-info">
+
+            <p>
+
+                <strong>Attendance:</strong>
+
+                {{ record.attendance }}%
+
+            </p>
+
+
+            <p>
+
+                <strong>Internal Marks:</strong>
+
+                {{ record.internal_marks }}
+
+            </p>
+
+
+            <p>
+
+                <strong>Assignment Marks:</strong>
+
+                {{ record.assignment_marks }}
+
+            </p>
+
+
+            <p>
+
+                <strong>Previous Marks:</strong>
+
+                {{ record.previous_marks }}
+
+            </p>
+
+
+            <p>
+
+                <strong>Study Hours:</strong>
+
+                {{ record.study_hours }} hrs
+
+            </p>
+
+
+            <p>
+
+                <strong>Backlogs:</strong>
+
+                {{ record.backlogs }}
+
+            </p>
+
+
+            <p>
+
+                <strong>Participation:</strong>
+
+                {{ record.participation }}%
+
+            </p>
+
+        </div>
+
+
+        <hr>
+
+
+        <!-- PREDICTION RESULT -->
+
+        <h2>Prediction Result</h2>
+
+
+        <div class="prediction-info">
+
+            <p>
+
+                <strong>Predicted Mark:</strong>
+
+                <span style="font-size: 28px; font-weight: bold;">
+
+                    {{ prediction.predicted_mark }}
+
+                </span>
+
+                / 100
+
+            </p>
+
+
+            <p>
+
+                <strong>Performance:</strong>
+
+                {{ prediction.performance }}
+
+            </p>
+
+
+            <p>
+
+                <strong>Risk Level:</strong>
+
+                {{ prediction.risk_level }}
+
+            </p>
+
+        </div>
+
+
+
+        <!-- HIGH RISK -->
+
+        {% if prediction.risk_level == "High" %}
+
+            <div class="error">
+
+                <strong>
+                    ⚠️ High Risk Student
+                </strong>
+
+                <br><br>
+
+                This student may require academic
+                support and intervention.
+
+                <br><br>
+
+                <a
+                    href="{% url 'add_support_plan' prediction.student.id %}"
+                    class="btn-primary">
+
+                    + Create Support Plan
+
+                </a>
+
+            </div>
+
+        {% endif %}
+
+
+
+        <!-- MEDIUM RISK -->
+
+        {% if prediction.risk_level == "Medium" %}
+
+            <div class="error">
+
+                <strong>
+                    ⚠️ Medium Risk Student
+                </strong>
+
+                <br><br>
+
+                The student's performance should
+                be monitored regularly.
+
+                <br><br>
+
+                <a
+                    href="{% url 'add_support_plan' prediction.student.id %}"
+                    class="btn-primary">
+
+                    + Create Support Plan
+
+                </a>
+
+            </div>
+
+        {% endif %}
+
+
+
+        <!-- LOW RISK -->
+
+        {% if prediction.risk_level == "Low" %}
+
+            <div class="welcome-box">
+
+                <strong>
+                    ✓ Low Risk Student
+                </strong>
+
+                <br><br>
+
+                The predicted performance is within
+                the expected range.
+
+            </div>
+
+        {% endif %}
+
+
+
+        <br><br>
+
+
+        <!-- BUTTONS -->
+
+        <div class="form-actions">
+
+            <a
+                href="{% url 'academic_records' %}"
+                class="btn-secondary">
+
+                ← Back to Academic Records
+
+            </a>
+
+        </div>
+
+
+    </div>
+
+
+</div>
+
+</body>
+
+</html>

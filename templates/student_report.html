@@ -1,0 +1,495 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Student Performance Report</title>
+
+    <link rel="stylesheet"
+          href="{% static 'css/style.css' %}">
+
+</head>
+
+
+<body>
+
+<div class="page-container">
+
+
+    <!-- HEADER -->
+
+    <div class="page-header">
+
+        <div>
+
+            <h1>Student Performance Report</h1>
+
+            <p>
+                Complete academic performance overview
+            </p>
+
+        </div>
+
+
+        <div>
+
+            <a
+                href="{% url 'student_list' %}"
+                class="btn-secondary">
+
+                ← Students
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- STUDENT DETAILS -->
+
+    <div class="form-card">
+
+        <h2>Student Details</h2>
+
+        <div class="prediction-info">
+
+            <p>
+                <strong>Name:</strong>
+                {{ student.name }}
+            </p>
+
+            <p>
+                <strong>Student ID:</strong>
+                {{ student.student_id }}
+            </p>
+
+            <p>
+                <strong>Email:</strong>
+                {{ student.email }}
+            </p>
+
+            <p>
+                <strong>Phone:</strong>
+                {{ student.phone }}
+            </p>
+
+            <p>
+                <strong>Course:</strong>
+                {{ student.course }}
+            </p>
+
+            <p>
+                <strong>Department:</strong>
+                {{ student.department }}
+            </p>
+
+            <p>
+                <strong>Current Semester:</strong>
+                {{ student.semester }}
+            </p>
+
+            <p>
+                <strong>Batch:</strong>
+                {{ student.batch }}
+            </p>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- LATEST PREDICTION -->
+
+    <div class="form-card">
+
+        <h2>Latest ML Prediction</h2>
+
+
+        {% if latest_prediction %}
+
+            <div class="prediction-info">
+
+                <p>
+
+                    <strong>Predicted Mark:</strong>
+
+                    <span style="
+                        font-size:28px;
+                        font-weight:bold;
+                    ">
+
+                        {{ latest_prediction.predicted_mark }}
+
+                    </span>
+
+                    / 100
+
+                </p>
+
+
+                <p>
+
+                    <strong>Performance:</strong>
+
+                    {{ latest_prediction.performance }}
+
+                </p>
+
+
+                <p>
+
+                    <strong>Risk Level:</strong>
+
+                    {{ latest_prediction.risk_level }}
+
+                </p>
+
+
+                <p>
+
+                    <strong>Predicted At:</strong>
+
+                    {{ latest_prediction.predicted_at|date:"d-m-Y H:i" }}
+
+                </p>
+
+            </div>
+
+
+        {% else %}
+
+            <p>
+                No prediction available for this student.
+            </p>
+
+        {% endif %}
+
+    </div>
+
+
+
+    <!-- ACADEMIC RECORDS -->
+
+    <div class="table-card">
+
+        <h2>Academic Records</h2>
+
+
+        <table class="staff-table">
+
+            <thead>
+
+                <tr>
+
+                    <th>Semester</th>
+
+                    <th>Attendance</th>
+
+                    <th>Internal</th>
+
+                    <th>Assignment</th>
+
+                    <th>Previous Marks</th>
+
+                    <th>Study Hours</th>
+
+                    <th>Backlogs</th>
+
+                    <th>Participation</th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+            {% for record in academic_records %}
+
+                <tr>
+
+                    <td>
+                        Semester {{ record.semester }}
+                    </td>
+
+                    <td>
+                        {{ record.attendance }}%
+                    </td>
+
+                    <td>
+                        {{ record.internal_marks }}
+                    </td>
+
+                    <td>
+                        {{ record.assignment_marks }}
+                    </td>
+
+                    <td>
+                        {{ record.previous_marks }}
+                    </td>
+
+                    <td>
+                        {{ record.study_hours }} hrs
+                    </td>
+
+                    <td>
+                        {{ record.backlogs }}
+                    </td>
+
+                    <td>
+                        {{ record.participation }}%
+                    </td>
+
+                </tr>
+
+
+            {% empty %}
+
+                <tr>
+
+                    <td
+                        colspan="8"
+                        style="text-align:center; padding:30px;">
+
+                        No academic records found.
+
+                    </td>
+
+                </tr>
+
+            {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+
+
+    <!-- PREDICTION HISTORY -->
+
+    <div class="table-card">
+
+        <h2>Prediction History</h2>
+
+
+        <table class="staff-table">
+
+            <thead>
+
+                <tr>
+
+                    <th>Predicted Mark</th>
+
+                    <th>Performance</th>
+
+                    <th>Risk</th>
+
+                    <th>Date</th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+            {% for prediction in predictions %}
+
+                <tr>
+
+                    <td>
+                        {{ prediction.predicted_mark }}
+                    </td>
+
+                    <td>
+                        {{ prediction.performance }}
+                    </td>
+
+                    <td>
+
+                        {% if prediction.risk_level == "High" %}
+
+                            🔴 High
+
+                        {% elif prediction.risk_level == "Medium" %}
+
+                            🟡 Medium
+
+                        {% else %}
+
+                            🟢 Low
+
+                        {% endif %}
+
+                    </td>
+
+                    <td>
+                        {{ prediction.predicted_at|date:"d-m-Y H:i" }}
+                    </td>
+
+                </tr>
+
+
+            {% empty %}
+
+                <tr>
+
+                    <td
+                        colspan="4"
+                        style="text-align:center; padding:30px;">
+
+                        No prediction history found.
+
+                    </td>
+
+                </tr>
+
+            {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+
+
+    <!-- SUPPORT PLANS -->
+
+    <div class="table-card">
+
+        <h2>Support & Intervention</h2>
+
+
+        <table class="staff-table">
+
+            <thead>
+
+                <tr>
+
+                    <th>Support Type</th>
+
+                    <th>Problem</th>
+
+                    <th>Action</th>
+
+                    <th>Staff</th>
+
+                    <th>Status</th>
+
+                    <th>Follow-up</th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+            {% for plan in support_plans %}
+
+                <tr>
+
+                    <td>
+                        {{ plan.support_type }}
+                    </td>
+
+                    <td>
+                        {{ plan.problem }}
+                    </td>
+
+                    <td>
+                        {{ plan.action_taken }}
+                    </td>
+
+                    <td>
+
+                        {% if plan.assigned_staff %}
+
+                            {{ plan.assigned_staff.name }}
+
+                        {% else %}
+
+                            Not Assigned
+
+                        {% endif %}
+
+                    </td>
+
+                    <td>
+                        {{ plan.status }}
+                    </td>
+
+                    <td>
+
+                        {% if plan.follow_up_date %}
+
+                            {{ plan.follow_up_date }}
+
+                        {% else %}
+
+                            Not Set
+
+                        {% endif %}
+
+                    </td>
+
+                </tr>
+
+
+            {% empty %}
+
+                <tr>
+
+                    <td
+                        colspan="6"
+                        style="text-align:center; padding:30px;">
+
+                        No support plans found.
+
+                    </td>
+
+                </tr>
+
+            {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+
+
+    <!-- BACK BUTTON -->
+
+    <div style="margin-top:25px;">
+
+        <a
+            href="{% url 'student_list' %}"
+            class="btn-secondary">
+
+            ← Back to Students
+
+        </a>
+
+    </div>
+
+
+</div>
+
+</body>
+
+</html>

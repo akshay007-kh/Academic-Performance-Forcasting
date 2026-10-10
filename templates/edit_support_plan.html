@@ -1,0 +1,283 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Edit Support Plan</title>
+
+    <link rel="stylesheet"
+          href="{% static 'css/style.css' %}">
+
+</head>
+
+
+<body>
+
+<div class="page-container">
+
+
+    <div class="page-header">
+
+        <div>
+
+            <h1>Edit Support Plan</h1>
+
+            <p>
+                Update student support and intervention details
+            </p>
+
+        </div>
+
+        <div>
+
+            <a href="{% url 'support_plans' %}"
+               class="btn-secondary">
+
+                ← Support Plans
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+
+    <div class="form-card">
+
+
+        <h2>Student Information</h2>
+
+        <div class="prediction-info">
+
+            <p>
+                <strong>Student:</strong>
+                {{ plan.student.name }}
+            </p>
+
+            <p>
+                <strong>Student ID:</strong>
+                {{ plan.student.student_id }}
+            </p>
+
+        </div>
+
+
+        <hr>
+
+
+        <form method="POST">
+
+            {% csrf_token %}
+
+
+            <div class="form-group">
+
+                <label>
+                    Support Type
+                </label>
+
+                <select name="support_type" required>
+
+                    <option value="Academic Mentoring"
+                        {% if plan.support_type == "Academic Mentoring" %}selected{% endif %}>
+                        Academic Mentoring
+                    </option>
+
+                    <option value="Attendance Monitoring"
+                        {% if plan.support_type == "Attendance Monitoring" %}selected{% endif %}>
+                        Attendance Monitoring
+                    </option>
+
+                    <option value="Subject Assistance"
+                        {% if plan.support_type == "Subject Assistance" %}selected{% endif %}>
+                        Subject Assistance
+                    </option>
+
+                    <option value="Study Plan"
+                        {% if plan.support_type == "Study Plan" %}selected{% endif %}>
+                        Study Plan
+                    </option>
+
+                    <option value="Extra Classes"
+                        {% if plan.support_type == "Extra Classes" %}selected{% endif %}>
+                        Extra Classes
+                    </option>
+
+                    <option value="Counselling"
+                        {% if plan.support_type == "Counselling" %}selected{% endif %}>
+                        Counselling
+                    </option>
+
+                    <option value="Other"
+                        {% if plan.support_type == "Other" %}selected{% endif %}>
+                        Other
+                    </option>
+
+                </select>
+
+            </div>
+
+
+
+            <div class="form-group">
+
+                <label>
+                    Problem Identified
+                </label>
+
+                <textarea
+                    name="problem"
+                    rows="4"
+                    required>{{ plan.problem }}</textarea>
+
+            </div>
+
+
+
+            <div class="form-group">
+
+                <label>
+                    Action Taken
+                </label>
+
+                <textarea
+                    name="action_taken"
+                    rows="4"
+                    required>{{ plan.action_taken }}</textarea>
+
+            </div>
+
+
+
+            <div class="form-group">
+
+                <label>
+                    Assigned Staff
+                </label>
+
+                <select name="assigned_staff">
+
+                    <option value="">
+                        Select Staff
+                    </option>
+
+                    {% for staff in staff_members %}
+
+                        <option
+                            value="{{ staff.id }}"
+                            {% if plan.assigned_staff and plan.assigned_staff.id == staff.id %}
+                                selected
+                            {% endif %}>
+
+                            {{ staff.name }} - {{ staff.department }}
+
+                        </option>
+
+                    {% endfor %}
+
+                </select>
+
+            </div>
+
+
+
+            <div class="form-group">
+
+                <label>
+                    Status
+                </label>
+
+                <select name="status" required>
+
+                    <option value="Pending"
+                        {% if plan.status == "Pending" %}selected{% endif %}>
+                        Pending
+                    </option>
+
+                    <option value="Ongoing"
+                        {% if plan.status == "Ongoing" %}selected{% endif %}>
+                        Ongoing
+                    </option>
+
+                    <option value="Completed"
+                        {% if plan.status == "Completed" %}selected{% endif %}>
+                        Completed
+                    </option>
+
+                </select>
+
+            </div>
+
+
+
+            <div class="form-group">
+
+                <label>
+                    Follow-up Date
+                </label>
+
+                <input
+                    type="date"
+                    name="follow_up_date"
+                    value="{{ plan.follow_up_date|date:'Y-m-d' }}">
+
+            </div>
+
+
+
+            <div class="form-group">
+
+                <label>
+                    Remarks
+                </label>
+
+                <textarea
+                    name="remarks"
+                    rows="4"
+                    placeholder="Add remarks...">{{ plan.remarks }}</textarea>
+
+            </div>
+
+
+
+            <div class="form-actions">
+
+                <a
+                    href="{% url 'support_plans' %}"
+                    class="btn-secondary">
+
+                    Cancel
+
+                </a>
+
+
+                <button
+                    type="submit"
+                    class="btn-primary">
+
+                    Update Support Plan
+
+                </button>
+
+            </div>
+
+
+        </form>
+
+
+    </div>
+
+
+</div>
+
+</body>
+
+</html>

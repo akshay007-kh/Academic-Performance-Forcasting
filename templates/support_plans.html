@@ -1,0 +1,282 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Support Plans</title>
+
+    <link rel="stylesheet"
+          href="{% static 'css/style.css' %}">
+
+</head>
+
+
+<body>
+
+<div class="page-container">
+
+
+    <!-- PAGE HEADER -->
+
+    <div class="page-header">
+
+        <div>
+
+            <h1>Support Plans</h1>
+
+            <p>
+                Manage student academic support and interventions
+            </p>
+
+        </div>
+
+
+        <div>
+
+            <a href="{% url 'staff_dashboard' %}"
+               class="btn-secondary">
+
+                ← Dashboard
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- SUPPORT PLAN TABLE -->
+
+    <div class="table-card">
+
+        <table class="staff-table">
+
+            <thead>
+
+                <tr>
+
+                    <th>Student</th>
+
+                    <th>Support Type</th>
+
+                    <th>Problem</th>
+
+                    <th>Action Taken</th>
+
+                    <th>Assigned Staff</th>
+
+                    <th>Status</th>
+
+                    <th>Follow-up Date</th>
+
+                    <th>Remarks</th>
+
+                    <th>Actions</th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+            {% for plan in plans %}
+
+                <tr>
+
+
+                    <!-- STUDENT -->
+
+                    <td>
+
+                        <strong>
+                            {{ plan.student.name }}
+                        </strong>
+
+                        <br>
+
+                        <small>
+                            {{ plan.student.student_id }}
+                        </small>
+
+                    </td>
+
+
+
+                    <!-- SUPPORT TYPE -->
+
+                    <td>
+
+                        {{ plan.support_type }}
+
+                    </td>
+
+
+
+                    <!-- PROBLEM -->
+
+                    <td>
+
+                        {{ plan.problem }}
+
+                    </td>
+
+
+
+                    <!-- ACTION TAKEN -->
+
+                    <td>
+
+                        {{ plan.action_taken }}
+
+                    </td>
+
+
+
+                    <!-- ASSIGNED STAFF -->
+
+                    <td>
+
+                        {% if plan.assigned_staff %}
+
+                            {{ plan.assigned_staff.name }}
+
+                        {% else %}
+
+                            Not Assigned
+
+                        {% endif %}
+
+                    </td>
+
+
+
+                    <!-- STATUS -->
+
+                    <td>
+
+                        {% if plan.status == "Pending" %}
+
+                            <strong>
+                                🟡 Pending
+                            </strong>
+
+                        {% elif plan.status == "Ongoing" %}
+
+                            <strong>
+                                🔵 Ongoing
+                            </strong>
+
+                        {% elif plan.status == "Completed" %}
+
+                            <strong>
+                                🟢 Completed
+                            </strong>
+
+                        {% endif %}
+
+                    </td>
+
+
+
+                    <!-- FOLLOW-UP DATE -->
+
+                    <td>
+
+                        {% if plan.follow_up_date %}
+
+                            {{ plan.follow_up_date }}
+
+                        {% else %}
+
+                            Not Set
+
+                        {% endif %}
+
+                    </td>
+
+
+
+                    <!-- REMARKS -->
+
+                    <td>
+
+                        {% if plan.remarks %}
+
+                            {{ plan.remarks }}
+
+                        {% else %}
+
+                            -
+
+                        {% endif %}
+
+                    </td>
+
+
+
+                    <!-- ACTIONS -->
+
+                    <td>
+
+                        <a href="{% url 'edit_support_plan' plan.id %}">
+
+                            Edit
+
+                        </a>
+
+                        &nbsp; | &nbsp;
+
+                        <a
+                            href="{% url 'delete_support_plan' plan.id %}"
+
+                            onclick="return confirm(
+                                'Are you sure you want to delete this support plan?'
+                            );">
+
+                            Delete
+
+                        </a>
+
+                    </td>
+
+
+                </tr>
+
+
+            {% empty %}
+
+                <tr>
+
+                    <td
+                        colspan="9"
+                        style="text-align: center; padding: 30px;">
+
+                        No support plans found.
+
+                    </td>
+
+                </tr>
+
+            {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+
+</div>
+
+</body>
+
+</html>

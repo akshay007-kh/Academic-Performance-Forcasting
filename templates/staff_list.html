@@ -1,0 +1,105 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+
+    <title>Staff Management</title>
+
+    <link rel="stylesheet"
+          href="{% static 'css/style.css' %}">
+
+</head>
+
+<body>
+
+<div class="page-container">
+
+    <div class="page-header">
+
+        <div>
+            <h1>Staff Management</h1>
+            <p>Manage staff members and their accounts</p>
+        </div>
+
+        <div>
+
+            <a href="{% url 'admin_dashboard' %}"
+               class="btn-secondary">
+                ← Dashboard
+            </a>
+
+            <a href="{% url 'add_staff' %}"
+               class="btn-primary">
+                + Add Staff
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <div class="table-card">
+
+        <table class="staff-table">
+
+            <thead>
+
+                <tr>
+                    <th>Name</th>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Department</th>
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+            {% for staff in staff_members %}
+
+                <tr>
+
+                    <td>{{ staff.name }}</td>
+
+                    <td>
+                        {{ staff.user.username }}
+                    </td>
+
+                    <td>
+                        {{ staff.user.email }}
+                    </td>
+
+                    <td>
+                        {{ staff.phone }}
+                    </td>
+
+                    <td>
+                        {{ staff.department }}
+                    </td>
+
+                </tr>
+
+            {% empty %}
+
+                <tr>
+
+                    <td colspan="5">
+                        No staff members found.
+                    </td>
+
+                </tr>
+
+            {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+</body>
+</html>

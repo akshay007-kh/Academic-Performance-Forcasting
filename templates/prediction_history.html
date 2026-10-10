@@ -1,0 +1,212 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Prediction History</title>
+
+    <link rel="stylesheet"
+          href="{% static 'css/style.css' %}">
+
+</head>
+
+
+<body>
+
+<div class="page-container">
+
+
+    <!-- PAGE HEADER -->
+
+    <div class="page-header">
+
+        <div>
+
+            <h1>Prediction History</h1>
+
+            <p>
+                View all ML-based student performance predictions
+            </p>
+
+        </div>
+
+
+        <div>
+
+            <a href="{% url 'staff_dashboard' %}"
+               class="btn-secondary">
+
+                ← Dashboard
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- PREDICTION TABLE -->
+
+    <div class="table-card">
+
+        <table class="staff-table">
+
+            <thead>
+
+                <tr>
+
+                    <th>Student</th>
+
+                    <th>Student ID</th>
+
+                    <th>Semester</th>
+
+                    <th>Predicted Mark</th>
+
+                    <th>Performance</th>
+
+                    <th>Risk Level</th>
+
+                    <th>Predicted At</th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+            {% for prediction in predictions %}
+
+                <tr>
+
+
+                    <!-- STUDENT -->
+
+                    <td>
+
+                        <strong>
+                            {{ prediction.student.name }}
+                        </strong>
+
+                    </td>
+
+
+
+                    <!-- STUDENT ID -->
+
+                    <td>
+
+                        {{ prediction.student.student_id }}
+
+                    </td>
+
+
+
+                    <!-- SEMESTER -->
+
+                    <td>
+
+                        Semester
+                        {{ prediction.academic_record.semester }}
+
+                    </td>
+
+
+
+                    <!-- PREDICTED MARK -->
+
+                    <td>
+
+                        <strong>
+
+                            {{ prediction.predicted_mark }}
+
+                        </strong>
+
+                        / 100
+
+                    </td>
+
+
+
+                    <!-- PERFORMANCE -->
+
+                    <td>
+
+                        {{ prediction.performance }}
+
+                    </td>
+
+
+
+                    <!-- RISK -->
+
+                    <td>
+
+                        {% if prediction.risk_level == "High" %}
+
+                            🔴 High
+
+                        {% elif prediction.risk_level == "Medium" %}
+
+                            🟡 Medium
+
+                        {% else %}
+
+                            🟢 Low
+
+                        {% endif %}
+
+                    </td>
+
+
+
+                    <!-- DATE -->
+
+                    <td>
+
+                        {{ prediction.predicted_at|date:"d-m-Y H:i" }}
+
+                    </td>
+
+
+                </tr>
+
+
+            {% empty %}
+
+                <tr>
+
+                    <td
+                        colspan="7"
+                        style="text-align:center; padding:30px;">
+
+                        No predictions found.
+
+                    </td>
+
+                </tr>
+
+            {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+
+</div>
+
+</body>
+
+</html>

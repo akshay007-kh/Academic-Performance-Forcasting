@@ -1,0 +1,459 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Staff Dashboard</title>
+
+    <link rel="stylesheet"
+          href="{% static 'css/style.css' %}">
+
+    <!-- Chart.js -->
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+</head>
+
+
+<body>
+
+<div class="dashboard">
+
+
+    <!-- SIDEBAR -->
+
+    <aside class="sidebar">
+
+        <div class="sidebar-header">
+
+            <h2>Academic Forecast</h2>
+
+            <p>Staff Panel</p>
+
+        </div>
+
+
+        <nav>
+
+            <a href="{% url 'staff_dashboard' %}">
+                🏠 Dashboard
+            </a>
+
+            <a href="{% url 'student_list' %}">
+                🎓 Students
+            </a>
+
+            <a href="{% url 'academic_records' %}">
+                📚 Academic Records
+            </a>
+
+            <a href="{% url 'prediction_history' %}">
+                🤖 Prediction History
+            </a>
+
+            <a href="{% url 'high_risk_students' %}">
+                ⚠️ High Risk Students
+            </a>
+
+            <a href="{% url 'support_plans' %}">
+                📋 Support Plans
+            </a>
+
+            <a href="{% url 'logout' %}">
+                🚪 Logout
+            </a>
+
+        </nav>
+
+    </aside>
+
+
+
+    <!-- MAIN CONTENT -->
+
+    <main class="main-content">
+
+
+        <!-- TOP BAR -->
+
+        <div class="topbar">
+
+            <div>
+
+                <h1>Staff Dashboard</h1>
+
+                <p>
+                    Academic Performance Forecasting System
+                </p>
+
+            </div>
+
+
+            <div class="user-info">
+
+                <strong>
+                    {{ request.user.username }}
+                </strong>
+
+                <span>
+                    Staff
+                </span>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- STATISTICS -->
+
+        <div class="cards">
+
+
+            <!-- TOTAL STUDENTS -->
+
+            <div class="card">
+
+                <h3>Total Students</h3>
+
+                <h2>
+                    {{ total_students }}
+                </h2>
+
+            </div>
+
+
+
+            <!-- HIGH RISK -->
+
+            <a
+                href="{% url 'high_risk_students' %}"
+                style="text-decoration:none; color:inherit;">
+
+                <div class="card danger">
+
+                    <h3>High Risk Students</h3>
+
+                    <h2>
+                        {{ high_risk }}
+                    </h2>
+
+                    <small>
+                        View students →
+                    </small>
+
+                </div>
+
+            </a>
+
+
+
+            <!-- MEDIUM RISK -->
+
+            <div class="card warning">
+
+                <h3>Medium Risk Students</h3>
+
+                <h2>
+                    {{ medium_risk }}
+                </h2>
+
+            </div>
+
+
+
+            <!-- LOW RISK -->
+
+            <div class="card">
+
+                <h3>Low Risk Students</h3>
+
+                <h2>
+                    {{ low_risk }}
+                </h2>
+
+            </div>
+
+
+
+            <!-- PENDING SUPPORT -->
+
+            <a
+                href="{% url 'support_plans' %}"
+                style="text-decoration:none; color:inherit;">
+
+                <div class="card warning">
+
+                    <h3>Pending Support</h3>
+
+                    <h2>
+                        {{ pending_support }}
+                    </h2>
+
+                    <small>
+                        View support plans →
+                    </small>
+
+                </div>
+
+            </a>
+
+
+
+            <!-- ONGOING SUPPORT -->
+
+            <a
+                href="{% url 'support_plans' %}"
+                style="text-decoration:none; color:inherit;">
+
+                <div class="card">
+
+                    <h3>Ongoing Support</h3>
+
+                    <h2>
+                        {{ ongoing_support }}
+                    </h2>
+
+                    <small>
+                        View support plans →
+                    </small>
+
+                </div>
+
+            </a>
+
+        </div>
+
+
+
+        <!-- WELCOME -->
+
+        <div class="welcome-box">
+
+            <h2>
+                Welcome, {{ request.user.username }} 👋
+            </h2>
+
+            <p>
+
+                Monitor student academic performance,
+                generate ML predictions and provide academic
+                support to students who need intervention.
+
+            </p>
+
+        </div>
+
+
+
+        <!-- ANALYTICS -->
+
+        <div class="table-card"
+             style="margin-top: 25px; padding: 25px;">
+
+            <h2>
+                📊 Student Risk Distribution
+            </h2>
+
+            <p>
+                Current distribution of students based on
+                ML performance predictions.
+            </p>
+
+
+            <div style="
+                max-width: 500px;
+                height: 350px;
+                margin: 30px auto;
+            ">
+
+                <canvas id="riskChart"></canvas>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- QUICK ACTIONS -->
+
+        <div class="quick-actions">
+
+            <h2>Quick Actions</h2>
+
+
+            <div class="action-grid">
+
+
+                <a
+                    href="{% url 'add_student' %}"
+                    class="action-card">
+
+                    <span>🎓</span>
+
+                    <h3>Add Student</h3>
+
+                    <p>
+                        Register a new student
+                    </p>
+
+                </a>
+
+
+
+                <a
+                    href="{% url 'academic_records' %}"
+                    class="action-card">
+
+                    <span>📚</span>
+
+                    <h3>Academic Records</h3>
+
+                    <p>
+                        Add or manage academic records
+                    </p>
+
+                </a>
+
+
+
+                <a
+                    href="{% url 'prediction_history' %}"
+                    class="action-card">
+
+                    <span>🤖</span>
+
+                    <h3>Prediction History</h3>
+
+                    <p>
+                        View ML prediction records
+                    </p>
+
+                </a>
+
+
+
+                <a
+                    href="{% url 'high_risk_students' %}"
+                    class="action-card">
+
+                    <span>⚠️</span>
+
+                    <h3>High Risk Students</h3>
+
+                    <p>
+                        Identify students needing attention
+                    </p>
+
+                </a>
+
+
+
+                <a
+                    href="{% url 'support_plans' %}"
+                    class="action-card">
+
+                    <span>📋</span>
+
+                    <h3>Support Plans</h3>
+
+                    <p>
+                        Manage student interventions
+                    </p>
+
+                </a>
+
+
+            </div>
+
+        </div>
+
+
+    </main>
+
+</div>
+
+
+
+<!-- CHART SCRIPT -->
+
+<script>
+
+const ctx = document.getElementById(
+    'riskChart'
+);
+
+
+new Chart(ctx, {
+
+    type: 'doughnut',
+
+    data: {
+
+        labels: [
+            'High Risk',
+            'Medium Risk',
+            'Low Risk'
+        ],
+
+        datasets: [{
+
+            data: [
+                {{ high_risk }},
+                {{ medium_risk }},
+                {{ low_risk }}
+            ],
+
+            backgroundColor: [
+                '#ef4444',
+                '#f59e0b',
+                '#22c55e'
+            ],
+
+            borderWidth: 2
+
+        }]
+
+    },
+
+    options: {
+
+        responsive: true,
+
+        maintainAspectRatio: false,
+
+        plugins: {
+
+            legend: {
+
+                position: 'bottom'
+
+            },
+
+            title: {
+
+                display: true,
+
+                text: 'Risk Level Distribution'
+
+            }
+
+        }
+
+    }
+
+});
+
+</script>
+
+
+</body>
+
+</html>

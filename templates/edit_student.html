@@ -1,0 +1,212 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>Edit Student</title>
+
+    <link rel="stylesheet"
+          href="{% static 'css/style.css' %}">
+
+</head>
+
+<body>
+
+<div class="page-container">
+
+    <div class="form-card">
+
+        <h2>Edit Student</h2>
+
+        <p class="form-description">
+            Update student information.
+        </p>
+
+
+        <form method="POST">
+
+            {% csrf_token %}
+
+
+            <div class="form-group">
+
+                <label>Student ID</label>
+
+                <input
+                    type="text"
+                    value="{{ student.student_id }}"
+                    disabled>
+
+            </div>
+
+
+            <div class="form-row">
+
+                <div class="form-group">
+
+                    <label>Full Name</label>
+
+                    <input
+                        type="text"
+                        name="name"
+                        value="{{ student.name }}"
+                        required>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>Email</label>
+
+                    <input
+                        type="email"
+                        name="email"
+                        value="{{ student.email }}"
+                        required>
+
+                </div>
+
+            </div>
+
+
+            <div class="form-row">
+
+                <div class="form-group">
+
+                    <label>Phone</label>
+
+                    <input
+                        type="text"
+                        name="phone"
+                        value="{{ student.phone }}"
+                        required>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>Course</label>
+
+                    <input
+                        type="text"
+                        name="course"
+                        value="{{ student.course }}"
+                        required>
+
+                </div>
+
+            </div>
+
+
+            <div class="form-row">
+
+                <div class="form-group">
+
+                    <label>Department</label>
+
+                    <select name="department" required>
+
+                        <option value="Computer Science"
+                            {% if student.department == "Computer Science" %}
+                                selected
+                            {% endif %}>
+                            Computer Science
+                        </option>
+
+                        <option value="Information Technology"
+                            {% if student.department == "Information Technology" %}
+                                selected
+                            {% endif %}>
+                            Information Technology
+                        </option>
+
+                        <option value="Electronics"
+                            {% if student.department == "Electronics" %}
+                                selected
+                            {% endif %}>
+                            Electronics
+                        </option>
+
+                        <option value="Mechanical"
+                            {% if student.department == "Mechanical" %}
+                                selected
+                            {% endif %}>
+                            Mechanical
+                        </option>
+
+                        <option value="Civil"
+                            {% if student.department == "Civil" %}
+                                selected
+                            {% endif %}>
+                            Civil
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>Semester</label>
+
+                    <input
+                        type="number"
+                        name="semester"
+                        min="1"
+                        max="10"
+                        value="{{ student.semester }}"
+                        required>
+
+                </div>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>Batch</label>
+
+                <input
+                    type="text"
+                    name="batch"
+                    value="{{ student.batch }}"
+                    required>
+
+            </div>
+
+
+            <div class="form-actions">
+
+                <button
+                    type="submit"
+                    class="btn-primary">
+
+                    Update Student
+
+                </button>
+
+
+                <a
+                    href="{% url 'student_list' %}"
+                    class="btn-secondary">
+
+                    Cancel
+
+                </a>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+</body>
+
+</html>

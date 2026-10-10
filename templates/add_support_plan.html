@@ -1,0 +1,335 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Add Support Plan</title>
+
+    <link rel="stylesheet"
+          href="{% static 'css/style.css' %}">
+
+</head>
+
+
+<body>
+
+<div class="page-container">
+
+
+    <!-- PAGE HEADER -->
+
+    <div class="page-header">
+
+        <div>
+
+            <h1>Create Support Plan</h1>
+
+            <p>
+                Create an academic support plan for the student
+            </p>
+
+        </div>
+
+
+        <div>
+
+            <a href="{% url 'staff_dashboard' %}"
+               class="btn-secondary">
+
+                ← Dashboard
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- FORM CARD -->
+
+    <div class="form-card">
+
+
+        <!-- STUDENT INFORMATION -->
+
+        <h2>Student Information</h2>
+
+        <div class="prediction-info">
+
+            <p>
+
+                <strong>Student Name:</strong>
+
+                {{ student.name }}
+
+            </p>
+
+
+            <p>
+
+                <strong>Student ID:</strong>
+
+                {{ student.student_id }}
+
+            </p>
+
+
+            <p>
+
+                <strong>Course:</strong>
+
+                {{ student.course }}
+
+            </p>
+
+
+            <p>
+
+                <strong>Department:</strong>
+
+                {{ student.department }}
+
+            </p>
+
+        </div>
+
+
+        <hr>
+
+
+
+        <!-- SUPPORT PLAN FORM -->
+
+        <form method="POST">
+
+            {% csrf_token %}
+
+
+            <!-- SUPPORT TYPE -->
+
+            <div class="form-group">
+
+                <label>
+                    Support Type
+                </label>
+
+                <select
+                    name="support_type"
+                    required>
+
+                    <option value="">
+                        Select Support Type
+                    </option>
+
+                    <option value="Academic Mentoring">
+                        Academic Mentoring
+                    </option>
+
+                    <option value="Attendance Monitoring">
+                        Attendance Monitoring
+                    </option>
+
+                    <option value="Subject Assistance">
+                        Subject Assistance
+                    </option>
+
+                    <option value="Study Plan">
+                        Study Plan
+                    </option>
+
+                    <option value="Extra Classes">
+                        Extra Classes
+                    </option>
+
+                    <option value="Counselling">
+                        Counselling
+                    </option>
+
+                    <option value="Other">
+                        Other
+                    </option>
+
+                </select>
+
+            </div>
+
+
+
+            <!-- PROBLEM -->
+
+            <div class="form-group">
+
+                <label>
+                    Problem Identified
+                </label>
+
+                <textarea
+                    name="problem"
+                    rows="4"
+                    placeholder="Describe the student's academic problem..."
+                    required></textarea>
+
+            </div>
+
+
+
+            <!-- ACTION TAKEN -->
+
+            <div class="form-group">
+
+                <label>
+                    Action Taken
+                </label>
+
+                <textarea
+                    name="action_taken"
+                    rows="4"
+                    placeholder="Describe the support or action planned..."
+                    required></textarea>
+
+            </div>
+
+
+
+            <!-- ASSIGNED STAFF -->
+
+            <div class="form-group">
+
+                <label>
+                    Assigned Staff
+                </label>
+
+                <select
+                    name="assigned_staff">
+
+                    <option value="">
+                        Select Staff
+                    </option>
+
+
+                    {% for staff in staff_members %}
+
+                        <option value="{{ staff.id }}">
+
+                            {{ staff.name }}
+
+                            -
+
+                            {{ staff.department }}
+
+                        </option>
+
+                    {% endfor %}
+
+                </select>
+
+            </div>
+
+
+
+            <!-- STATUS -->
+
+            <div class="form-group">
+
+                <label>
+                    Status
+                </label>
+
+                <select
+                    name="status"
+                    required>
+
+                    <option value="Pending">
+                        Pending
+                    </option>
+
+                    <option value="Ongoing">
+                        Ongoing
+                    </option>
+
+                    <option value="Completed">
+                        Completed
+                    </option>
+
+                </select>
+
+            </div>
+
+
+
+            <!-- FOLLOW UP DATE -->
+
+            <div class="form-group">
+
+                <label>
+                    Follow-up Date
+                </label>
+
+                <input
+                    type="date"
+                    name="follow_up_date">
+
+            </div>
+
+
+
+            <!-- REMARKS -->
+
+            <div class="form-group">
+
+                <label>
+                    Remarks
+                </label>
+
+                <textarea
+                    name="remarks"
+                    rows="4"
+                    placeholder="Add any additional remarks..."></textarea>
+
+            </div>
+
+
+
+            <!-- BUTTONS -->
+
+            <div class="form-actions">
+
+                <a
+                    href="{% url 'academic_records' %}"
+                    class="btn-secondary">
+
+                    Cancel
+
+                </a>
+
+
+                <button
+                    type="submit"
+                    class="btn-primary">
+
+                    Create Support Plan
+
+                </button>
+
+            </div>
+
+
+        </form>
+
+
+    </div>
+
+
+</div>
+
+</body>
+
+</html>

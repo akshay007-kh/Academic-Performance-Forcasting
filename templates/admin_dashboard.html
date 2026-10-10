@@ -1,0 +1,586 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Admin Dashboard</title>
+
+    <link rel="stylesheet"
+          href="{% static 'css/style.css' %}">
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+</head>
+
+
+<body>
+
+<div class="dashboard">
+
+
+    <!-- SIDEBAR -->
+
+    <aside class="sidebar">
+
+        <div class="sidebar-header">
+
+            <h2>Academic Forecast</h2>
+
+            <p>Admin Panel</p>
+
+        </div>
+
+
+        <nav>
+
+            <a href="{% url 'admin_dashboard' %}">
+                🏠 Dashboard
+            </a>
+
+            <a href="{% url 'staff_list' %}">
+                👥 Staff Management
+            </a>
+
+            <a href="{% url 'student_list' %}">
+                🎓 Students
+            </a>
+
+            <a href="{% url 'academic_records' %}">
+                📚 Academic Records
+            </a>
+
+            <a href="{% url 'prediction_history' %}">
+                🤖 Prediction History
+            </a>
+
+            <a href="{% url 'high_risk_students' %}">
+                ⚠️ High Risk Students
+            </a>
+
+            <a href="{% url 'support_plans' %}">
+                📋 Support Plans
+            </a>
+
+            <a href="{% url 'logout' %}">
+                🚪 Logout
+            </a>
+
+        </nav>
+
+    </aside>
+
+
+
+    <!-- MAIN CONTENT -->
+
+    <main class="main-content">
+
+
+        <!-- TOP BAR -->
+
+        <div class="topbar">
+
+            <div>
+
+                <h1>Admin Dashboard</h1>
+
+                <p>
+                    Academic Performance Forecasting System
+                </p>
+
+            </div>
+
+
+            <div class="user-info">
+
+                <strong>
+                    {{ request.user.username }}
+                </strong>
+
+                <span>
+                    Administrator
+                </span>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- STATISTICS -->
+
+        <div class="cards">
+
+
+            <div class="card">
+
+                <h3>Total Staff</h3>
+
+                <h2>
+                    {{ total_staff }}
+                </h2>
+
+            </div>
+
+
+
+            <div class="card">
+
+                <h3>Total Students</h3>
+
+                <h2>
+                    {{ total_students }}
+                </h2>
+
+            </div>
+
+
+
+            <a
+                href="{% url 'high_risk_students' %}"
+                style="text-decoration:none; color:inherit;">
+
+                <div class="card danger">
+
+                    <h3>High Risk Students</h3>
+
+                    <h2>
+                        {{ high_risk }}
+                    </h2>
+
+                    <small>
+                        View students →
+                    </small>
+
+                </div>
+
+            </a>
+
+
+
+            <a
+                href="{% url 'support_plans' %}"
+                style="text-decoration:none; color:inherit;">
+
+                <div class="card warning">
+
+                    <h3>Pending Support</h3>
+
+                    <h2>
+                        {{ pending_support }}
+                    </h2>
+
+                    <small>
+                        View support plans →
+                    </small>
+
+                </div>
+
+            </a>
+
+        </div>
+
+
+
+        <!-- RISK STATISTICS -->
+
+        <div class="cards">
+
+
+            <div class="card danger">
+
+                <h3>High Risk</h3>
+
+                <h2>
+                    {{ high_risk }}
+                </h2>
+
+            </div>
+
+
+
+            <div class="card warning">
+
+                <h3>Medium Risk</h3>
+
+                <h2>
+                    {{ medium_risk }}
+                </h2>
+
+            </div>
+
+
+
+            <div class="card">
+
+                <h3>Low Risk</h3>
+
+                <h2>
+                    {{ low_risk }}
+                </h2>
+
+            </div>
+
+
+
+            <div class="card">
+
+                <h3>Ongoing Support</h3>
+
+                <h2>
+                    {{ ongoing_support }}
+                </h2>
+
+            </div>
+
+
+
+            <div class="card">
+
+                <h3>Completed Support</h3>
+
+                <h2>
+                    {{ completed_support }}
+                </h2>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- WELCOME -->
+
+        <div class="welcome-box">
+
+            <h2>
+                Welcome, Administrator 👋
+            </h2>
+
+            <p>
+
+                Monitor staff, students, academic performance,
+                ML predictions and student support activities
+                from the administration dashboard.
+
+            </p>
+
+        </div>
+
+
+
+        <!-- RISK CHART -->
+
+        <div class="table-card"
+             style="margin-top:25px; padding:25px;">
+
+            <h2>
+                📊 Student Risk Distribution
+            </h2>
+
+            <p>
+                Distribution based on ML performance predictions.
+            </p>
+
+
+            <div style="
+                max-width:500px;
+                height:350px;
+                margin:30px auto;
+            ">
+
+                <canvas id="riskChart"></canvas>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- SUPPORT CHART -->
+
+        <div class="table-card"
+             style="margin-top:25px; padding:25px;">
+
+            <h2>
+                📋 Support Plan Status
+            </h2>
+
+            <p>
+                Current status of student intervention plans.
+            </p>
+
+
+            <div style="
+                max-width:600px;
+                height:350px;
+                margin:30px auto;
+            ">
+
+                <canvas id="supportChart"></canvas>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- QUICK ACTIONS -->
+
+        <div class="quick-actions">
+
+            <h2>Quick Actions</h2>
+
+
+            <div class="action-grid">
+
+
+                <a
+                    href="{% url 'add_staff' %}"
+                    class="action-card">
+
+                    <span>👥</span>
+
+                    <h3>Add Staff</h3>
+
+                    <p>
+                        Create a new staff account
+                    </p>
+
+                </a>
+
+
+
+                <a
+                    href="{% url 'student_list' %}"
+                    class="action-card">
+
+                    <span>🎓</span>
+
+                    <h3>Manage Students</h3>
+
+                    <p>
+                        View and manage students
+                    </p>
+
+                </a>
+
+
+
+                <a
+                    href="{% url 'academic_records' %}"
+                    class="action-card">
+
+                    <span>📚</span>
+
+                    <h3>Academic Records</h3>
+
+                    <p>
+                        Manage academic data
+                    </p>
+
+                </a>
+
+
+
+                <a
+                    href="{% url 'prediction_history' %}"
+                    class="action-card">
+
+                    <span>🤖</span>
+
+                    <h3>Prediction History</h3>
+
+                    <p>
+                        View ML prediction records
+                    </p>
+
+                </a>
+
+
+
+                <a
+                    href="{% url 'high_risk_students' %}"
+                    class="action-card">
+
+                    <span>⚠️</span>
+
+                    <h3>High Risk Students</h3>
+
+                    <p>
+                        Identify students needing attention
+                    </p>
+
+                </a>
+
+
+
+                <a
+                    href="{% url 'support_plans' %}"
+                    class="action-card">
+
+                    <span>📋</span>
+
+                    <h3>Support Plans</h3>
+
+                    <p>
+                        Manage student interventions
+                    </p>
+
+                </a>
+
+
+            </div>
+
+        </div>
+
+
+    </main>
+
+</div>
+
+
+
+<!-- RISK CHART -->
+
+<script>
+
+const riskCtx =
+    document.getElementById('riskChart');
+
+
+new Chart(riskCtx, {
+
+    type: 'doughnut',
+
+    data: {
+
+        labels: [
+            'High Risk',
+            'Medium Risk',
+            'Low Risk'
+        ],
+
+        datasets: [{
+
+            data: [
+                {{ high_risk }},
+                {{ medium_risk }},
+                {{ low_risk }}
+            ],
+
+            backgroundColor: [
+                '#ef4444',
+                '#f59e0b',
+                '#22c55e'
+            ],
+
+            borderWidth: 2
+
+        }]
+
+    },
+
+    options: {
+
+        responsive: true,
+
+        maintainAspectRatio: false,
+
+        plugins: {
+
+            legend: {
+
+                position: 'bottom'
+
+            }
+
+        }
+
+    }
+
+});
+
+</script>
+
+
+
+<!-- SUPPORT CHART -->
+
+<script>
+
+const supportCtx =
+    document.getElementById('supportChart');
+
+
+new Chart(supportCtx, {
+
+    type: 'bar',
+
+    data: {
+
+        labels: [
+            'Pending',
+            'Ongoing',
+            'Completed'
+        ],
+
+        datasets: [{
+
+            label: 'Support Plans',
+
+            data: [
+                {{ pending_support }},
+                {{ ongoing_support }},
+                {{ completed_support }}
+            ],
+
+            backgroundColor: [
+                '#f59e0b',
+                '#3b82f6',
+                '#22c55e'
+            ]
+
+        }]
+
+    },
+
+    options: {
+
+        responsive: true,
+
+        maintainAspectRatio: false,
+
+        scales: {
+
+            y: {
+
+                beginAtZero: true,
+
+                ticks: {
+
+                    precision: 0
+
+                }
+
+            }
+
+        }
+
+    }
+
+});
+
+</script>
+
+
+</body>
+
+</html>
